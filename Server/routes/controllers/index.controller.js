@@ -50,12 +50,39 @@ const getMota = async (req, res) => {
   res.json(response.rows);
 };
 const getAll = async (req, res) => {
-  const response = await pool.query(
-    "select * from nodos;"
-  );
-  res.json(response.rows);
+  const response = await pool.query("select * from nodos;");
+  res.status(200).json(response.rows);
 };
-
+const getnodeByid = async (req, res) => {
+  const response = await pool.query("SELECT * FROM nodos WHERE id = $1", [
+    req.params.id,
+  ]);
+  res.status(200).json(response.rows);
+};
+const createNode = async (req, res) => {
+  const { name, description } = req.body;
+  const response = await pool.query(
+    "INSERT INTO nodos (name, description) VALUES ($1, $2)",
+    [name, description]
+  );
+  console.log(response);
+  res.send("Node created");
+};
+const updateNode = async (req, res) => {
+  const id = req.params.id;
+  const { name, description } = req.body;
+  const response = await pool.query(
+    "UPDATE nodos SET name=$1 , description = $2 WHERE id=$3",
+    [name, description, id]
+  );
+  res.send("Nodo actualizado")
+};
+const deleteNode = async (req, res) => {
+  const response = await pool.query("DELETE FROM nodos WHERE id=$1", [
+    req.params.id,
+  ]);
+  res.send("NODE DELETE ");
+};
 
 module.exports = {
   getCannabis,
@@ -65,5 +92,9 @@ module.exports = {
   getFlores,
   getArbol,
   getMota,
-  getAll
+  getAll,
+  createNode,
+  getnodeByid,
+  deleteNode,
+  updateNode,
 };

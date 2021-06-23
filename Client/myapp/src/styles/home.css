@@ -6,9 +6,30 @@
     -webkit-box-direction: normal;
     flex-direction: column;
     min-width: 0;
+    height: 100%;
+    width: 100%;
     word-wrap: break-word;
     background-clip: border-box;
     border: 1px solid rgba(0, 0, 0, 0.125);
+  }
+  .Modal {
+    font-size: 12px;
+    position: relative;
+    height: 100%;
+    top: 40px;
+    font-size: 12px;
+    align-items: center;
+    left: 70%;
+    right: 40px;
+    bottom: 40px;
+    top: 0px;
+    border: 1px solid #ccc;
+    background: #fff;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 4px;
+    outline: none;
+    padding: 40px;
   }
   .contenedor {
     margin-bottom: 20px;
