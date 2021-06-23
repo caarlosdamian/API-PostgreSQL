@@ -49,6 +49,13 @@ const getMota = async (req, res) => {
   );
   res.json(response.rows);
 };
+const getAll = async (req, res) => {
+  const response = await pool.query(
+    "select * from nodos;"
+  );
+  res.json(response.rows);
+};
+
 
 module.exports = {
   getCannabis,
@@ -57,5 +64,6 @@ module.exports = {
   getZacate,
   getFlores,
   getArbol,
-  getMota
+  getMota,
+  getAll
 };

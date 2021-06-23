@@ -8,8 +8,9 @@ const {
   getFlores,
   getArbol,
   getMota,
+  getAll,
 } = require("./controllers/index.controller");
-
+router.get("/all", getAll);
 router.get("/cannabis", getCannabis);
 router.get("/cactus", getCactus);
 router.get("/limon", getLimon);
