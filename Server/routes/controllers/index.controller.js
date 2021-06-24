@@ -75,13 +75,22 @@ const updateNode = async (req, res) => {
     "UPDATE nodos SET name=$1 , description = $2 WHERE id=$3",
     [name, description, id]
   );
-  res.send("Nodo actualizado")
+  res.send("Nodo actualizado");
 };
 const deleteNode = async (req, res) => {
   const response = await pool.query("DELETE FROM nodos WHERE id=$1", [
     req.params.id,
   ]);
   res.send("NODE DELETE ");
+};
+const updateActuador = async (req, res) => {
+  const nombre_sensor = req.params.id;
+  const { actuador } = req.body;
+  const response = await pool.query(
+    "UPDATE datos_sensor SET actuador=$1  WHERE nombre_sensor=$2",
+    [actuador, nombre_sensor]
+  );
+  res.send("Actuador actualizado ");
 };
 
 module.exports = {
@@ -97,4 +106,5 @@ module.exports = {
   getnodeByid,
   deleteNode,
   updateNode,
+  updateActuador,
 };

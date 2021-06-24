@@ -13,6 +13,7 @@ const {
   getnodeByid,
   deleteNode,
   updateNode,
+  updateActuador,
 } = require("./controllers/index.controller");
 router.get("/nodes", getAll);
 router.get("/cannabis", getCannabis);
@@ -26,4 +27,5 @@ router.get("/node/:id", getnodeByid);
 router.delete("/node/:id", deleteNode);
 router.put("/node/:id", updateNode);
 router.post("/nodes", createNode);
+router.put("/actuador/:id", updateActuador);
 module.exports = router;
