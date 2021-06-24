@@ -60,10 +60,10 @@ const getnodeByid = async (req, res) => {
   res.status(200).json(response.rows);
 };
 const createNode = async (req, res) => {
-  const { name, description } = req.body;
+  const { name, description, act } = req.body;
   const response = await pool.query(
-    "INSERT INTO nodos (name, description) VALUES ($1, $2)",
-    [name, description]
+    "INSERT INTO nodos (name, description,act) VALUES ($1, $2,$3)",
+    [name, description, act]
   );
   console.log(response);
   res.send("Node created");
@@ -84,12 +84,12 @@ const deleteNode = async (req, res) => {
   res.send("NODE DELETE ");
 };
 const updateActuador = async (req, res) => {
-  const nombre_sensor = req.params.id;
-  const { actuador } = req.body;
-  const response = await pool.query(
-    "UPDATE datos_sensor SET actuador=$1  WHERE nombre_sensor=$2",
-    [actuador, nombre_sensor]
-  );
+  const id = req.params.id;
+  const { act } = req.body;
+  const response = await pool.query("UPDATE nodos SET act=$1  WHERE id=$2", [
+    act,
+    id,
+  ]);
   res.send("Actuador actualizado ");
 };
 

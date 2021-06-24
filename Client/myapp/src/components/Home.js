@@ -11,11 +11,13 @@ import swal from "sweetalert";
 function Home() {
   const [information, setInformation] = useState([]);
   const [name, setname] = useState();
+  const [act, setAct] = useState(false);
   const [description, setDescription] = useState();
   const [newname, setnewname] = useState();
   const [newdescription, setnewDescription] = useState();
   const [modalAdd, setmodalAdd] = useState(false);
   const [modal_Delete, setModalDelete] = useState(false);
+  const [modal_Actuador, setModalActuador] = useState(false);
   const [modal_edit, setModalEdit] = useState(false);
   const [nodeSelected, setNodeSelected] = useState({
     id: "",
@@ -31,13 +33,20 @@ function Home() {
   }, []);
   const selectNode = (val, caso) => {
     setNodeSelected(val);
-    caso === "Editar" ? setModalEdit(true) : setModalDelete(true);
+    if (caso === "Editar") {
+      setModalEdit(true);
+    } else if (caso === "Eliminar") {
+      setModalDelete(true);
+    } else {
+      setModalActuador(true);
+    }
   };
   const addNode = () => {
     setmodalAdd(false);
     Axios.post("http://localhost:3002/nodes", {
       name: name,
       description: description,
+      act:act,
     }).then(
       (res) => {
         Axios.get("http://localhost:3002/nodes").then((response) => {
@@ -64,6 +73,28 @@ function Home() {
         Axios.get("http://localhost:3002/nodes").then((response) => {
           setInformation(response.data);
           swal("Nodo Actualizado", {
+            icon: "success",
+          });
+          setnewDescription("");
+          setnewname("");
+        });
+      },
+      (error) => {
+        swal("No Actualizado", "Reintentar", {
+          icon: "error",
+        });
+      }
+    );
+  };
+  const updateActuador = (nodeSelected) => {
+    setModalActuador(false);
+    Axios.put(`http://localhost:3002/actuador/${nodeSelected.id}`, {
+      act: !nodeSelected.act,
+    }).then(
+      (res) => {
+        Axios.get("http://localhost:3002/nodes").then((response) => {
+          setInformation(response.data);
+          swal("Actuador Actualizado", {
             icon: "success",
           });
           setnewDescription("");
@@ -115,6 +146,7 @@ function Home() {
             <th>Id</th>
             <th>Nombre</th>
             <th>Descripcion</th>
+            <th>Actuador</th>
             <th>Acciones</th>
           </tr>
           {information.map((val) => {
@@ -123,6 +155,7 @@ function Home() {
                 <td>{val.id}</td>
                 <td>{val.name}</td>
                 <td>{val.description}</td>
+                <td>{val.act ? "Encendido" : "Apagado"}</td>
                 <td>
                   <Button
                     variant="outline-info"
@@ -141,6 +174,14 @@ function Home() {
                   >
                     {" "}
                     Eliminar
+                  </Button>
+                  <Button
+                    variant="outline-warning"
+                    onClick={() => {
+                      selectNode(val, "Actuador");
+                    }}
+                  >
+                    Actuador
                   </Button>
                 </td>
               </tr>
@@ -258,6 +299,34 @@ function Home() {
               variant="outline-danger"
               size="sm"
               onClick={() => setModalDelete(false)}
+            >
+              Cancelar
+            </Button>
+          </form>
+        </div>
+      </ReactModal>
+      <ReactModal
+        isOpen={modal_Actuador}
+        onRequestClose={() => setModalActuador(false)}
+        className="Modal"
+      >
+        <div>
+          <h1>Cambiar Estado</h1>
+          <hr></hr>
+          <form>
+            <Button
+              variant="outline-primary"
+              size="sm"
+              onClick={() => {
+                updateActuador(nodeSelected);
+              }}
+            >
+              Confirmar
+            </Button>
+            <Button
+              variant="outline-danger"
+              size="sm"
+              onClick={() => setModalActuador(false)}
             >
               Cancelar
             </Button>
